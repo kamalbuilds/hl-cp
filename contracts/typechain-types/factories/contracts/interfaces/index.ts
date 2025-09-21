@@ -2,3 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export { ICopyTrading__factory } from "./ICopyTrading__factory";
+export { ICoreWriter__factory } from "./ICoreWriter__factory";
+export { IL1Read__factory } from "./IL1Read__factory";

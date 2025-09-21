@@ -11,7 +11,8 @@ const config: HardhatUserConfig = {
       optimizer: {
         enabled: true,
         runs: 200
-      }
+      },
+      viaIR: true
     }
   },
   networks: {
@@ -19,7 +20,7 @@ const config: HardhatUserConfig = {
       chainId: 31337
     },
     hyperevm: {
-      url: process.env.HYPEREVM_RPC_URL || "https://api.hyperliquid-testnet.xyz/evm",
+      url: process.env.HYPEREVM_RPC_URL || "https://rpc.hyperliquid-testnet.xyz/evm",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       chainId: 998
     },

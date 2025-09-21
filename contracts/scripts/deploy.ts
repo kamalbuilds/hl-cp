@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  console.log("Deploying CopyTrading contract...");
+  console.log("Deploying HyperCoreCopyTrading contract...");
 
   // Get the deployer account
   const [deployer] = await ethers.getSigners();
@@ -11,17 +11,17 @@ async function main() {
   const balance = await ethers.provider.getBalance(deployer.address);
   console.log("Account balance:", ethers.formatEther(balance));
 
-  // Deploy the CopyTrading contract
-  const CopyTrading = await ethers.getContractFactory("CopyTrading");
+  // Deploy the HyperCoreCopyTrading contract
+  const HyperCoreCopyTrading = await ethers.getContractFactory("HyperCoreCopyTrading");
 
   // Set the fee recipient (could be deployer or a different address)
   const feeRecipient = deployer.address;
 
-  const copyTrading = await CopyTrading.deploy(feeRecipient);
+  const copyTrading = await HyperCoreCopyTrading.deploy(feeRecipient);
   await copyTrading.waitForDeployment();
 
   const contractAddress = await copyTrading.getAddress();
-  console.log("CopyTrading contract deployed to:", contractAddress);
+  console.log("HyperCoreCopyTrading contract deployed to:", contractAddress);
   console.log("Fee recipient set to:", feeRecipient);
 
   // Verify contract on block explorer (if not on localhost)

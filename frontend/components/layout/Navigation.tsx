@@ -16,6 +16,7 @@ export function Navigation() {
 
   const navItems = [
     { href: '/', label: 'Home', icon: Home },
+    { href: '/trade', label: 'Trade', icon: TrendingUp },
     { href: '/traders', label: 'Traders', icon: Users },
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/test-widget', label: 'Bridge', icon: ArrowRightLeft },

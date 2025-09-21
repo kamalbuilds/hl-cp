@@ -12,6 +12,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "evmVersion": "paris",
           "outputSelection": {
             "*": {
@@ -53,6 +54,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "evmVersion": "paris",
           "outputSelection": {
             "*": {
@@ -89,6 +91,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "evmVersion": "paris",
           "outputSelection": {
             "*": {
@@ -116,6 +119,43 @@
         "Ownable"
       ]
     },
+    "/Users/kamal/Desktop/hyperliq/claude-code-hooks-mastery/hl-cp/contracts/node_modules/@openzeppelin/contracts/utils/ReentrancyGuard.sol": {
+      "lastModificationDate": 1758501802077,
+      "contentHash": "190613e556d509d9e9a0ea43dc5d891d",
+      "sourceName": "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "viaIR": true,
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "ReentrancyGuard"
+      ]
+    },
     "/Users/kamal/Desktop/hyperliq/claude-code-hooks-mastery/hl-cp/contracts/node_modules/@openzeppelin/contracts/utils/Pausable.sol": {
       "lastModificationDate": 1758501802076,
       "contentHash": "0d47b53e10b1985efbb396f937626279",
@@ -127,6 +167,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "evmVersion": "paris",
           "outputSelection": {
             "*": {
@@ -154,42 +195,6 @@
         "Pausable"
       ]
     },
-    "/Users/kamal/Desktop/hyperliq/claude-code-hooks-mastery/hl-cp/contracts/node_modules/@openzeppelin/contracts/utils/ReentrancyGuard.sol": {
-      "lastModificationDate": 1758501802077,
-      "contentHash": "190613e556d509d9e9a0ea43dc5d891d",
-      "sourceName": "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
-      "solcConfig": {
-        "version": "0.8.20",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ReentrancyGuard"
-      ]
-    },
     "/Users/kamal/Desktop/hyperliq/claude-code-hooks-mastery/hl-cp/contracts/node_modules/@openzeppelin/contracts/utils/Context.sol": {
       "lastModificationDate": 1758501802001,
       "contentHash": "67bfbc07588eb8683b3fd8f6f909563e",
@@ -201,6 +206,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "evmVersion": "paris",
           "outputSelection": {
             "*": {
@@ -224,6 +230,123 @@
       ],
       "artifacts": [
         "Context"
+      ]
+    },
+    "/Users/kamal/Desktop/hyperliq/claude-code-hooks-mastery/hl-cp/contracts/contracts/HyperCoreCopyTrading.sol": {
+      "lastModificationDate": 1758519471541,
+      "contentHash": "d17e70a4cbb2e4e36b69d5d1f1f9bf38",
+      "sourceName": "contracts/HyperCoreCopyTrading.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "viaIR": true,
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
+        "@openzeppelin/contracts/utils/Pausable.sol",
+        "./interfaces/IL1Read.sol",
+        "./interfaces/ICoreWriter.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "HyperCoreCopyTrading"
+      ]
+    },
+    "/Users/kamal/Desktop/hyperliq/claude-code-hooks-mastery/hl-cp/contracts/contracts/interfaces/IL1Read.sol": {
+      "lastModificationDate": 1758517951644,
+      "contentHash": "1d1ed459f43cf383a8baed7025646a1f",
+      "sourceName": "contracts/interfaces/IL1Read.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "viaIR": true,
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IL1Read"
+      ]
+    },
+    "/Users/kamal/Desktop/hyperliq/claude-code-hooks-mastery/hl-cp/contracts/contracts/interfaces/ICoreWriter.sol": {
+      "lastModificationDate": 1758517961358,
+      "contentHash": "e62c851389ed637d4dc6cf1bd94e14c8",
+      "sourceName": "contracts/interfaces/ICoreWriter.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "viaIR": true,
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ICoreWriter"
       ]
     }
   }

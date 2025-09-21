@@ -17,6 +17,9 @@
   "dependencies": {
     "@headlessui/react": "^1.7.0",
     "@heroicons/react": "^2.0.0",
+    "@pythnetwork/hermes-client": "^2.0.0",
+    "@pythnetwork/price-service-client": "^1.9.0",
+    "@pythnetwork/pyth-evm-js": "^2.0.0-alpha2",
     "@rainbow-me/rainbowkit": "^1.3.0",
     "@tanstack/react-query": "^4.36.0",
     "@types/node": "^20.8.0",

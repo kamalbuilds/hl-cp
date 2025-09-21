@@ -2,3 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { ICopyTrading } from "./ICopyTrading";
+export type { ICoreWriter } from "./ICoreWriter";
+export type { IL1Read } from "./IL1Read";

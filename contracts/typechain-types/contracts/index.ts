@@ -4,3 +4,4 @@
 import type * as interfaces from "./interfaces";
 export type { interfaces };
 export type { CopyTrading } from "./CopyTrading";
+export type { HyperCoreCopyTrading } from "./HyperCoreCopyTrading";

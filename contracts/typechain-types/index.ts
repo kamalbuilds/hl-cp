@@ -14,5 +14,11 @@ export type { ReentrancyGuard } from "./@openzeppelin/contracts/utils/Reentrancy
 export { ReentrancyGuard__factory } from "./factories/@openzeppelin/contracts/utils/ReentrancyGuard__factory";
 export type { CopyTrading } from "./contracts/CopyTrading";
 export { CopyTrading__factory } from "./factories/contracts/CopyTrading__factory";
+export type { HyperCoreCopyTrading } from "./contracts/HyperCoreCopyTrading";
+export { HyperCoreCopyTrading__factory } from "./factories/contracts/HyperCoreCopyTrading__factory";
 export type { ICopyTrading } from "./contracts/interfaces/ICopyTrading";
 export { ICopyTrading__factory } from "./factories/contracts/interfaces/ICopyTrading__factory";
+export type { ICoreWriter } from "./contracts/interfaces/ICoreWriter";
+export { ICoreWriter__factory } from "./factories/contracts/interfaces/ICoreWriter__factory";
+export type { IL1Read } from "./contracts/interfaces/IL1Read";
+export { IL1Read__factory } from "./factories/contracts/interfaces/IL1Read__factory";

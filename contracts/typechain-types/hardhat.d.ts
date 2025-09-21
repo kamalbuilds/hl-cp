@@ -30,9 +30,21 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CopyTrading__factory>;
     getContractFactory(
+      name: "HyperCoreCopyTrading",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.HyperCoreCopyTrading__factory>;
+    getContractFactory(
       name: "ICopyTrading",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ICopyTrading__factory>;
+    getContractFactory(
+      name: "ICoreWriter",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ICoreWriter__factory>;
+    getContractFactory(
+      name: "IL1Read",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IL1Read__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -55,10 +67,25 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.CopyTrading>;
     getContractAt(
+      name: "HyperCoreCopyTrading",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.HyperCoreCopyTrading>;
+    getContractAt(
       name: "ICopyTrading",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.ICopyTrading>;
+    getContractAt(
+      name: "ICoreWriter",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ICoreWriter>;
+    getContractAt(
+      name: "IL1Read",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IL1Read>;
 
     deployContract(
       name: "Ownable",
@@ -77,9 +104,21 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CopyTrading>;
     deployContract(
+      name: "HyperCoreCopyTrading",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.HyperCoreCopyTrading>;
+    deployContract(
       name: "ICopyTrading",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ICopyTrading>;
+    deployContract(
+      name: "ICoreWriter",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ICoreWriter>;
+    deployContract(
+      name: "IL1Read",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IL1Read>;
 
     deployContract(
       name: "Ownable",
@@ -102,10 +141,25 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CopyTrading>;
     deployContract(
+      name: "HyperCoreCopyTrading",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.HyperCoreCopyTrading>;
+    deployContract(
       name: "ICopyTrading",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ICopyTrading>;
+    deployContract(
+      name: "ICoreWriter",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ICoreWriter>;
+    deployContract(
+      name: "IL1Read",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IL1Read>;
 
     // default types
     getContractFactory(

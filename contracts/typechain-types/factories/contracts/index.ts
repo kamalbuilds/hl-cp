@@ -3,3 +3,4 @@
 /* eslint-disable */
 export * as interfaces from "./interfaces";
 export { CopyTrading__factory } from "./CopyTrading__factory";
+export { HyperCoreCopyTrading__factory } from "./HyperCoreCopyTrading__factory";

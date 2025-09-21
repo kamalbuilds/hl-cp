@@ -1,39 +1,74 @@
-# HyperMirror 🪞
+# HyperMirror - Mirror the Masters, Multiply Your Success
 
-**Mirror the Masters, Multiply Your Success**
+## Overview
+Revolutionary cross-chain copy trading platform built on HyperEVM with direct HyperCore integration for real perpetual trading on Hyperliquid L1.
 
-A revolutionary cross-chain copy trading platform built on HyperEVM for the Hyperliquid hackathon. HyperMirror enables users to automatically mirror trades from elite traders with instant execution, advanced risk management, and seamless cross-chain onboarding through deBridge.
+## Key Features
 
-## 🚀 Features
+### 🚀 HyperCore Integration
+- Direct L1 perpetual trading through CoreWriter contract at 0x3333333333333333333333333333333333333333
+- Real-time position tracking via L1Read precompiles
+- Oracle price feeds from address 0x0000000000000000000000000000000000000807
+- Best bid/offer data from address 0x000000000000000000000000000000000000080e
+- Account margin tracking from address 0x000000000000000000000000000000000000080F
+- Sub-second order execution with ~25k gas cost
 
-### Core Functionality
-- **Real-time Copy Trading**: Automatically mirror trades from verified traders with customizable settings
-- **Cross-chain Bridging**: Seamless asset bridging from multiple chains to HyperEVM using deBridge
-- **Advanced Risk Management**: Stop-loss, take-profit, position sizing, and portfolio allocation controls
-- **Trader Discovery**: Browse and filter traders by performance metrics, risk levels, and strategies
-- **Portfolio Tracking**: Real-time portfolio overview with P&L tracking and risk analytics
+### 💫 Copy Trading Features
+- Automated position mirroring for all copiers
+- Proportional sizing based on leverage (1x-50x)
+- Performance fee system (0-50% of profits)
+- Real-time PnL calculation and settlement
+- Risk management controls (reduce-only, TIF options)
 
-### Smart Contracts (HyperEVM)
-- **CopyTrading.sol**: Main contract for copy trading functionality
-- **Trader Registration**: On-chain trader verification and fee management
-- **Position Management**: Automated position creation and closure
-- **Risk Controls**: Built-in risk limits and safety mechanisms
+### 🌉 Cross-Chain Bridge
+- deBridge integration for seamless onboarding
+- Support for Ethereum, Arbitrum, Optimism, Polygon, BSC
+- One-click bridging to HyperEVM (Chain ID 999)
 
-### Frontend Components
-- **Wallet Integration**: MetaMask, WalletConnect, and RainbowKit support
-- **Responsive UI**: Mobile-first design with dark mode support
-- **Real-time Updates**: WebSocket integration for live trade data
-- **Interactive Charts**: Portfolio performance and trader analytics
+### 📊 Trading Interface
+- Live oracle prices with 1-second updates
+- Real-time position monitoring
+- Advanced order types (Limit, Market, IOC, GTC, ALO)
+- Margin ratio tracking with visual indicators
+- Quick trade buttons and leverage slider
 
-## 🛠 Tech Stack
+### 👥 Social Trading
+- Trader profiles with performance metrics
+- Win rate and ROI tracking
+- Social links (Twitter, Telegram, Discord)
+- Leaderboard with filtering and sorting
+- Follower dashboard with portfolio tracking
 
-- **Frontend**: Next.js 14, TypeScript, Tailwind CSS
-- **Blockchain**: HyperEVM, Arbitrum, Ethereum
-- **Wallet**: Wagmi, RainbowKit, Viem
-- **Smart Contracts**: Solidity 0.8.19, Hardhat
-- **Bridge**: deBridge Widget/API
-- **Real-time**: WebSocket, Socket.io
-- **UI Components**: Headless UI, Heroicons, Lucide React
+## Tech Stack
+
+### Smart Contracts
+- Solidity 0.8.20
+- OpenZeppelin security contracts
+- HyperCore precompile integration
+- CoreWriter for L1 actions
+
+### Frontend
+- Next.js 14 with App Router
+- TypeScript for type safety
+- Wagmi v2 for Web3 integration
+- RainbowKit for wallet connection
+- TailwindCSS for styling
+- React Hot Toast for notifications
+
+### Infrastructure
+- HyperEVM (Chain ID 998/999)
+- Hardhat development environment
+- deBridge cross-chain protocol
+
+## Contract Addresses
+
+### Testnet (Chain ID 998)
+- CopyTrading: [To be deployed]
+- HyperCoreCopyTrading: [To be deployed]
+
+### Mainnet (Chain ID 999)
+- CopyTrading: [To be deployed]
+- HyperCoreCopyTrading: [To be deployed]
 
 ## 📁 Project Structure
 
@@ -61,42 +96,81 @@ hyperliquid-copy-trading/
 └── config/                # Configuration files
 ```
 
-## 🚀 Quick Start
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+
-- npm or yarn
+- Bun or npm
 - MetaMask or compatible wallet
 
 ### Installation
 
-1. **Clone the repository**
+1. Clone the repository
+2. Install dependencies:
 ```bash
-git clone https://github.com/kamalbuilds/hl-cp
-cd hl-cp
-```
-
-2. **Install dependencies**
-```bash
+# Contracts
+cd contracts
 npm install
+
+# Frontend
+cd ../frontend
+bun install
 ```
 
-3. **Environment setup**
+3. Configure environment:
 ```bash
-cp .env.example .env.local
-# Edit .env.local with your configuration
+# Copy example env files
+cp contracts/.env.example contracts/.env
+cp frontend/.env.example frontend/.env
 ```
 
-4. **Start development server**
+4. Deploy contracts:
 ```bash
-npm run dev
+cd contracts
+npx hardhat compile
+npx hardhat run scripts/deploy.ts --network hyperevm
 ```
 
-5. **Deploy smart contracts (optional)**
+5. Start frontend:
 ```bash
-npm run contracts:compile
-npm run contracts:deploy
+cd frontend
+bun run dev
 ```
+
+## Architecture
+
+### System Components
+1. **HyperCore Layer**: Direct L1 integration for trading
+2. **Smart Contract Layer**: Copy trading logic and fee management
+3. **Frontend Layer**: React-based trading interface
+4. **Bridge Layer**: deBridge for cross-chain transfers
+
+### Data Flow
+1. Trader places order via HyperCore
+2. CoreWriter sends action to L1
+3. Copy contract mirrors to all copiers
+4. L1Read precompiles track positions
+5. Frontend displays real-time updates
+
+## HyperCore Action Types
+
+| Action ID | Description | Gas Cost |
+|-----------|-------------|----------|
+| 1 | Limit Order | ~47k |
+| 2 | Vault Transfer | ~30k |
+| 7 | USD Class Transfer | ~25k |
+| 10 | Cancel by OID | ~25k |
+| 11 | Cancel by CLOID | ~25k |
+
+## API Endpoints
+
+### HyperEVM RPC
+- Testnet: https://rpc.hyperliquid-testnet.xyz/evm
+- Mainnet: https://rpc.hyperevm.xyz/evm
+
+### WebSocket
+- Testnet: wss://api.hyperliquid-testnet.xyz/ws
+- Mainnet: wss://api.hyperliquid.xyz/ws
 
 ## 📖 Usage Guide
 
@@ -237,13 +311,13 @@ npm run contracts:deploy -- --network hyperevm
 npm run contracts:verify
 ```
 
-## 🛡 Security Considerations
+## Security
 
-- **Smart Contract Audits**: Contracts should be audited before mainnet deployment
-- **Private Key Management**: Never commit private keys to version control
-- **Rate Limiting**: API endpoints should implement rate limiting
-- **Input Validation**: All user inputs are validated and sanitized
-- **Access Controls**: Proper role-based access control implementation
+- ReentrancyGuard on all state-changing functions
+- Pausable contract for emergency stops
+- Owner-only admin functions
+- Performance fee caps (max 50%)
+- Reduce-only order support
 
 ## 🤝 Contributing
 
@@ -253,29 +327,13 @@ npm run contracts:verify
 4. Push to the branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
 
-## 📄 License
+## License
+MIT
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Team
+Built for Hyperliquid Hackathon 2024 - deBridge Track
 
-## 🆘 Support
-
-- **Documentation**: [docs/](docs/)
-- **Issues**: [GitHub Issues](https://github.com/your-repo/hyperliquid-copy-trading/issues)
-- **Discord**: [Community Discord](https://discord.gg/your-server)
-
-## 🏆 Hackathon Submission
-
-This project was built for the Hyperliquid hackathon, focusing on:
-- Cross-chain interoperability with deBridge integration
-- Real-time copy trading on HyperEVM
-- Advanced risk management features
-- User-friendly interface for DeFi adoption
-
-### Demo Links
-- **Live Demo**: [hyperliquid-copy-trading.vercel.app](https://hyperliquid-copy-trading.vercel.app)
-- **Video Demo**: [YouTube Demo](https://youtube.com/watch?v=demo)
-- **Contract on HyperEVM**: [Explorer Link](https://explorer.hyperliquid-testnet.xyz)
-
----
-
-Built with ❤️ for the Hyperliquid ecosystem
+## Links
+- [Demo Video](#)
+- [Documentation](#)
+- [Twitter](#)
