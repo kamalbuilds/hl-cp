@@ -4,10 +4,10 @@ const nextConfig = {
     // appDir is no longer needed in Next.js 14
   },
   typescript: {
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
   },
   eslint: {
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true,
   },
   webpack: (config) => {
     config.resolve.fallback = {

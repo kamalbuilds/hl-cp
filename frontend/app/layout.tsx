@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google';
 import { WalletProvider } from '@/contexts/WalletContext';
+import { RootLayout as Layout } from '@/components/layout/RootLayout';
 import './globals.css';
 import "@rainbow-me/rainbowkit/styles.css";
 
@@ -26,7 +27,9 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <body className={`${inter.className} h-full bg-gray-50 dark:bg-gray-900`}>
         <WalletProvider>
-          {children}
+          <Layout>
+            {children}
+          </Layout>
         </WalletProvider>
       </body>
     </html>
