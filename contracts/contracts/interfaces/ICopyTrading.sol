@@ -3,25 +3,20 @@ pragma solidity ^0.8.19;
 
 /**
  * @title ICopyTrading
- * @dev Interface for the copy trading contract
+ * @dev Interface for the CopyTrading contract
  */
 interface ICopyTrading {
-    /**
-     * @dev Register as a trader
-     * @param _feeRate Fee rate in basis points
-     * @param _maxCopyAmount Maximum amount that can be copied per trade
-     */
-    function registerTrader(uint256 _feeRate, uint256 _maxCopyAmount) external;
+    // Events
+    event TraderRegistered(address indexed trader, uint256 feeRate, uint256 maxCopyAmount);
+    event TraderUpdated(address indexed trader, uint256 feeRate, uint256 maxCopyAmount);
+    event CopySettingsUpdated(address indexed follower, address indexed trader, uint256 allocation);
+    event PositionOpened(uint256 indexed positionId, address indexed trader, address indexed follower, string symbol, bool isLong, uint256 size, uint256 price);
+    event PositionClosed(uint256 indexed positionId, int256 pnl, uint256 closedPrice);
+    event FeesCollected(address indexed trader, address indexed follower, uint256 amount);
 
-    /**
-     * @dev Set copy settings for a trader
-     * @param _trader Address of trader to copy
-     * @param _allocation Allocation percentage in basis points
-     * @param _maxPositionSize Maximum position size
-     * @param _stopLoss Stop loss in basis points
-     * @param _takeProfit Take profit in basis points
-     * @param _riskMultiplier Risk multiplier in basis points
-     */
+    // Functions
+    function registerTrader(uint256 _feeRate, uint256 _maxCopyAmount) external;
+    function updateTraderSettings(uint256 _feeRate, uint256 _maxCopyAmount) external;
     function setCopySettings(
         address _trader,
         uint256 _allocation,
@@ -29,16 +24,7 @@ interface ICopyTrading {
         uint256 _stopLoss,
         uint256 _takeProfit,
         uint256 _riskMultiplier
-    ) external;
-
-    /**
-     * @dev Execute a trade
-     * @param _symbol Trading symbol
-     * @param _isLong True for long, false for short
-     * @param _size Position size
-     * @param _price Entry price
-     * @param _leverage Leverage amount
-     */
+    ) external payable;
     function executeTrade(
         string memory _symbol,
         bool _isLong,
@@ -46,29 +32,15 @@ interface ICopyTrading {
         uint256 _price,
         uint256 _leverage
     ) external;
-
-    /**
-     * @dev Close a position
-     * @param _positionId Position ID to close
-     * @param _exitPrice Exit price
-     */
-    function closePosition(uint256 _positionId, uint256 _exitPrice) external;
-
-    /**
-     * @dev Deposit funds for copy trading
-     */
-    function deposit() external payable;
-
-    /**
-     * @dev Withdraw funds
-     * @param _amount Amount to withdraw
-     */
-    function withdraw(uint256 _amount) external;
-
-    /**
-     * @dev Get user's open positions
-     * @param _user User address
-     * @return Array of position IDs
-     */
-    function getUserPositions(address _user) external view returns (uint256[] memory);
+    function closePosition(uint256 _positionId, uint256 _closePrice) external;
+    function stopCopying(address _trader) external;
+    function getTraderStats(address _trader) external view returns (
+        uint256 feeRate,
+        uint256 totalFollowers,
+        uint256 totalVolume,
+        int256 totalPnL,
+        bool isActive
+    );
+    function getUserOpenPositions(address _user) external view returns (uint256[] memory);
+    function getRegisteredTraders() external view returns (address[] memory);
 }

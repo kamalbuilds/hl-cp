@@ -11,7 +11,7 @@ import "./interfaces/ICopyTrading.sol";
  * @dev Main contract for copy trading functionality on HyperEVM
  * @notice Allows users to copy trades from verified traders with risk management
  */
-contract CopyTrading is ICopyTrading, ReentrancyGuard, Ownable, Pausable {
+contract CopyTrading is ICopyTrading, ReentrancyGuard, Ownable(msg.sender), Pausable {
     struct Trader {
         address trader;
         bool isVerified;
@@ -61,12 +61,11 @@ contract CopyTrading is ICopyTrading, ReentrancyGuard, Ownable, Pausable {
     uint256 public constant MAX_ALLOCATION = 5000; // 50% max allocation per trader
     uint256 public constant MAX_LEVERAGE = 10000; // 100x max leverage (in basis points)
 
-    // Events
-    event TraderRegistered(address indexed trader, uint256 feeRate);
+    // Additional state variables
+    address[] public registeredTraders;
+
+    // Events (some already defined in interface, only add additional ones)
     event TraderVerified(address indexed trader);
-    event CopySettingsUpdated(address indexed copier, address indexed trader, uint256 allocation);
-    event PositionOpened(uint256 indexed positionId, address indexed trader, address indexed copier);
-    event PositionClosed(uint256 indexed positionId, int256 pnl);
     event TradeExecuted(address indexed trader, string symbol, bool isLong, uint256 size, uint256 price);
     event FundsDeposited(address indexed user, uint256 amount);
     event FundsWithdrawn(address indexed user, uint256 amount);
@@ -80,7 +79,7 @@ contract CopyTrading is ICopyTrading, ReentrancyGuard, Ownable, Pausable {
      * @param _feeRate Fee rate in basis points (max 1000 = 10%)
      * @param _maxCopyAmount Maximum amount that can be copied per trade
      */
-    function registerTrader(uint256 _feeRate, uint256 _maxCopyAmount) external {
+    function registerTrader(uint256 _feeRate, uint256 _maxCopyAmount) external override {
         require(_feeRate <= 1000, "Fee rate too high");
         require(_maxCopyAmount > 0, "Invalid max copy amount");
 
@@ -89,7 +88,19 @@ contract CopyTrading is ICopyTrading, ReentrancyGuard, Ownable, Pausable {
         trader.feeRate = _feeRate;
         trader.maxCopyAmount = _maxCopyAmount;
 
-        emit TraderRegistered(msg.sender, _feeRate);
+        // Add to registered traders list if not already there
+        bool isNew = true;
+        for (uint i = 0; i < registeredTraders.length; i++) {
+            if (registeredTraders[i] == msg.sender) {
+                isNew = false;
+                break;
+            }
+        }
+        if (isNew) {
+            registeredTraders.push(msg.sender);
+        }
+
+        emit TraderRegistered(msg.sender, _feeRate, _maxCopyAmount);
     }
 
     /**
@@ -118,7 +129,7 @@ contract CopyTrading is ICopyTrading, ReentrancyGuard, Ownable, Pausable {
         uint256 _stopLoss,
         uint256 _takeProfit,
         uint256 _riskMultiplier
-    ) external {
+    ) external payable override {
         require(traders[_trader].isVerified, "Trader not verified");
         require(_allocation <= MAX_ALLOCATION, "Allocation too high");
         require(_riskMultiplier <= 20000, "Risk multiplier too high"); // Max 2x
@@ -155,7 +166,7 @@ contract CopyTrading is ICopyTrading, ReentrancyGuard, Ownable, Pausable {
         uint256 _size,
         uint256 _price,
         uint256 _leverage
-    ) external whenNotPaused {
+    ) external override whenNotPaused {
         require(traders[msg.sender].isVerified, "Not verified trader");
         require(_leverage <= MAX_LEVERAGE, "Leverage too high");
         require(_size > 0 && _price > 0, "Invalid parameters");
@@ -175,7 +186,7 @@ contract CopyTrading is ICopyTrading, ReentrancyGuard, Ownable, Pausable {
      * @param _positionId Position ID to close
      * @param _exitPrice Exit price
      */
-    function closePosition(uint256 _positionId, uint256 _exitPrice) external {
+    function closePosition(uint256 _positionId, uint256 _exitPrice) external override {
         Position storage position = positions[_positionId];
         require(position.copier == msg.sender || position.trader == msg.sender, "Not authorized");
         require(position.isOpen, "Position already closed");
@@ -209,7 +220,7 @@ contract CopyTrading is ICopyTrading, ReentrancyGuard, Ownable, Pausable {
             userBalances[position.copier] -= loss;
         }
 
-        emit PositionClosed(_positionId, position.pnl);
+        emit PositionClosed(_positionId, position.pnl, _exitPrice);
     }
 
     /**
@@ -298,7 +309,7 @@ contract CopyTrading is ICopyTrading, ReentrancyGuard, Ownable, Pausable {
 
         userPositions[_copier].push(positionId);
 
-        emit PositionOpened(positionId, _trader, _copier);
+        emit PositionOpened(positionId, _trader, _copier, _symbol, _isLong, adjustedSize, _price);
     }
 
     /**
@@ -340,5 +351,89 @@ contract CopyTrading is ICopyTrading, ReentrancyGuard, Ownable, Pausable {
     function updatePlatformFeeRate(uint256 _newFeeRate) external onlyOwner {
         require(_newFeeRate <= 500, "Fee rate too high"); // Max 5%
         platformFeeRate = _newFeeRate;
+    }
+
+    /**
+     * @dev Update trader settings
+     */
+    function updateTraderSettings(uint256 _feeRate, uint256 _maxCopyAmount) external override {
+        require(traders[msg.sender].trader == msg.sender, "Not a trader");
+        require(_feeRate <= 1000, "Fee rate too high");
+        require(_maxCopyAmount > 0, "Invalid max copy amount");
+
+        traders[msg.sender].feeRate = _feeRate;
+        traders[msg.sender].maxCopyAmount = _maxCopyAmount;
+
+        emit TraderUpdated(msg.sender, _feeRate, _maxCopyAmount);
+    }
+
+    /**
+     * @dev Stop copying a trader
+     */
+    function stopCopying(address _trader) external override {
+        CopySettings storage settings = copySettings[msg.sender][_trader];
+        require(settings.isActive, "Not copying this trader");
+
+        settings.isActive = false;
+        if (traders[_trader].followers > 0) {
+            traders[_trader].followers--;
+        }
+
+        emit CopySettingsUpdated(msg.sender, _trader, 0);
+    }
+
+    /**
+     * @dev Get trader statistics
+     */
+    function getTraderStats(address _trader) external view override returns (
+        uint256 feeRate,
+        uint256 totalFollowers,
+        uint256 totalVolume,
+        int256 totalPnL,
+        bool isActive
+    ) {
+        Trader storage trader = traders[_trader];
+        return (
+            trader.feeRate,
+            trader.followers,
+            trader.totalVolume,
+            0, // totalPnL would need to be calculated from positions
+            trader.isVerified
+        );
+    }
+
+    /**
+     * @dev Get user's open positions
+     */
+    function getUserOpenPositions(address _user) external view override returns (uint256[] memory) {
+        uint256[] memory allPositions = userPositions[_user];
+        uint256 openCount = 0;
+
+        // Count open positions
+        for (uint256 i = 0; i < allPositions.length; i++) {
+            if (positions[allPositions[i]].isOpen) {
+                openCount++;
+            }
+        }
+
+        // Create array of open positions
+        uint256[] memory openPositions = new uint256[](openCount);
+        uint256 index = 0;
+
+        for (uint256 i = 0; i < allPositions.length; i++) {
+            if (positions[allPositions[i]].isOpen) {
+                openPositions[index] = allPositions[i];
+                index++;
+            }
+        }
+
+        return openPositions;
+    }
+
+    /**
+     * @dev Get all registered traders
+     */
+    function getRegisteredTraders() external view override returns (address[] memory) {
+        return registeredTraders;
     }
 }
