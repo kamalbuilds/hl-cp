@@ -142,16 +142,7 @@ export default function HomePage() {
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                   Bridge Assets
                 </h2>
-                <DeBridgeWidget
-                  onSuccess={(txHash) => {
-                    console.log('Bridge successful:', txHash);
-                    // Handle successful bridge
-                  }}
-                  onError={(error) => {
-                    console.error('Bridge error:', error);
-                    // Handle bridge error
-                  }}
-                />
+                <DeBridgeWidget />
               </div>
 
               {/* Quick Stats */}
