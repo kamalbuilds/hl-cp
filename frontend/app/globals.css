@@ -50,9 +50,6 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
     @apply bg-background text-foreground;
   }
@@ -113,7 +110,7 @@
 
 /* Focus styles */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800;
 }
 
 /* Card hover effects */
@@ -136,7 +133,7 @@
 
 /* Text gradients */
 .text-gradient {
-  @apply bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent;
 }
 
 /* Glass morphism effect */
@@ -163,7 +160,7 @@
 
 .status-online::after {
   content: '';
-  @apply absolute -top-1 -right-1 w-3 h-3 bg-success-500 rounded-full border-2 border-white dark:border-gray-800;
+  @apply absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800;
 }
 
 /* Print styles */

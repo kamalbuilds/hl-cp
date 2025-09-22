@@ -22,9 +22,9 @@ const nextConfig = {
     domains: ['avatars.githubusercontent.com', 'api.dicebear.com'],
   },
   env: {
-    HYPEREVM_RPC_URL: process.env.HYPEREVM_RPC_URL,
-    DEBRIDGE_API_KEY: process.env.DEBRIDGE_API_KEY,
-    WEBSOCKET_URL: process.env.WEBSOCKET_URL,
+    HYPEREVM_RPC_URL: process.env.HYPEREVM_RPC_URL || 'https://api.hyperliquid-testnet.xyz/evm',
+    DEBRIDGE_API_KEY: process.env.DEBRIDGE_API_KEY || '',
+    WEBSOCKET_URL: process.env.WEBSOCKET_URL || 'wss://api.hyperliquid-testnet.xyz/ws',
   },
 }
 
