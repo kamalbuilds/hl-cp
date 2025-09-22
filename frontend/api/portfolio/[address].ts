@@ -59,6 +59,7 @@ const mockPortfolios: Record<string, Portfolio> = {
         enabledSymbols: ['BTC-USD', 'ETH-USD', 'SOL-USD'],
         riskMultiplier: 10000, // 1x
         autoRebalance: true,
+        isActive: true,
       },
       {
         traderId: '2',
@@ -69,6 +70,7 @@ const mockPortfolios: Record<string, Portfolio> = {
         enabledSymbols: ['ETH-USD', 'AVAX-USD'],
         riskMultiplier: 8000, // 0.8x
         autoRebalance: false,
+        isActive: false,
       },
     ],
     riskMetrics: {

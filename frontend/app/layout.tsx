@@ -6,8 +6,15 @@ import "@rainbow-me/rainbowkit/styles.css";
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Hyperliquid Copy Trading Platform',
-  description: 'Cross-chain copy trading platform for Hyperliquid hackathon',
+  title: 'HyperMirror - Mirror the Masters, Multiply Your Success',
+  description: 'Revolutionary cross-chain copy trading on HyperEVM. Instantly mirror elite traders with advanced risk management and seamless deBridge integration.',
+  keywords: 'copy trading, HyperEVM, Hyperliquid, deBridge, cross-chain, DeFi, trading',
+  authors: [{ name: 'HyperMirror Team' }],
+  openGraph: {
+    title: 'HyperMirror - Cross-Chain Copy Trading',
+    description: 'Mirror the Masters, Multiply Your Success',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({

@@ -50,6 +50,7 @@ export interface CopyTradeSettings {
   enabledSymbols: string[];
   riskMultiplier: number;
   autoRebalance: boolean;
+  isActive: boolean; // Whether the copy trading is currently active
 }
 
 export interface Portfolio {

@@ -17,17 +17,14 @@ interface DeBridgeWidgetProps {
 declare global {
   interface Window {
     deBridge?: {
-      widget: {
-        create: (config: any) => void;
-        on: (event: string, callback: Function) => void;
-      };
+      widget: (config: any) => Promise<any> | any;
     };
   }
 }
 
 export function DeBridgeWidget({
-  destinationChainId = 998, // HyperEVM
-  destinationTokenAddress = '0x0000000000000000000000000000000000000000', // ETH
+  destinationChainId = 999, // HyperEVM chain ID 999 as per the example
+  destinationTokenAddress = '',
   amount,
   onSuccess,
   onError,
@@ -37,86 +34,185 @@ export function DeBridgeWidget({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [bridgeQuote, setBridgeQuote] = useState<BridgeQuote | null>(null);
+  const [widgetId] = useState(`debridgeWidget_${Math.random().toString(36).substr(2, 9)}`);
 
   useEffect(() => {
     const loadDeBridgeWidget = async () => {
       try {
-        // Load deBridge widget script if not already loaded
-        if (!window.deBridge) {
-          const script = document.createElement('script');
-          script.src = 'https://app.dln.trade/widget/widget.js';
-          script.async = true;
-          script.onload = () => initializeWidget();
-          script.onerror = () => {
-            setError('Failed to load deBridge widget');
-            setIsLoading(false);
-          };
-          document.head.appendChild(script);
-        } else {
+        // Check if widget is already loaded
+        if (window.deBridge?.widget) {
           initializeWidget();
+          return;
         }
+
+        // Load deBridge widget script
+        const script = document.createElement('script');
+        script.src = 'https://app.debridge.finance/assets/scripts/widget.js';
+        script.async = true;
+
+        const timeoutId = setTimeout(() => {
+          setError('Widget loading timeout - trying alternative approach');
+          script.remove();
+          setIsLoading(false);
+        }, 10000); // 10 second timeout
+
+        script.onload = () => {
+          clearTimeout(timeoutId);
+          // Wait a bit for the widget to fully initialize
+          setTimeout(() => {
+            if (window.deBridge?.widget) {
+              initializeWidget();
+            } else {
+              console.warn('Widget script loaded but deBridge.widget not available, retrying...');
+              setTimeout(initializeWidget, 1000);
+            }
+          }, 500);
+        };
+
+        script.onerror = (error) => {
+          clearTimeout(timeoutId);
+          console.error('Failed to load deBridge widget script:', error);
+          setError('Failed to load widget script');
+          setIsLoading(false);
+        };
+
+        document.head.appendChild(script);
       } catch (err) {
-        setError('Failed to initialize bridge widget');
+        console.error('Error loading deBridge widget:', err);
+        setError('Error loading widget');
         setIsLoading(false);
       }
     };
 
-    const initializeWidget = () => {
-      if (!window.deBridge || !widgetRef.current) {
-        setError('Widget initialization failed');
+    const tryAlternativeWidget = () => {
+      // Try alternative CDN or fallback to manual bridge
+      console.log('Trying alternative widget loading...');
+
+      const alternativeScript = document.createElement('script');
+      alternativeScript.src = 'https://cdn.debridge.finance/widget/widget.js';
+      alternativeScript.async = true;
+      alternativeScript.onload = () => {
+        setTimeout(initializeWidget, 500);
+      };
+      alternativeScript.onerror = () => {
+        console.warn('Alternative widget also failed, showing manual bridge');
+        setError('Widget unavailable - using manual bridge mode');
         setIsLoading(false);
+      };
+
+      document.head.appendChild(alternativeScript);
+    };
+
+    const initializeWidget = () => {
+      if (!window.deBridge?.widget || !widgetRef.current) {
+        console.warn('Widget API not available, retrying in 1 second...');
+        setTimeout(() => {
+          if (window.deBridge?.widget) {
+            initializeWidget();
+          } else {
+            setError('Widget initialization failed - API not available');
+            setIsLoading(false);
+          }
+        }, 1000);
         return;
       }
 
       try {
-        window.deBridge.widget.create({
-          element: widgetRef.current,
-          title: 'Bridge to HyperEVM',
-          theme: 'dark', // or 'light'
-          src: {
-            chainId: null, // Auto-detect source chain
-            chainName: null,
-            tokenAddress: null,
-          },
-          dst: {
-            chainId: destinationChainId,
-            chainName: 'HyperEVM',
-            tokenAddress: destinationTokenAddress,
-          },
-          amount: amount || '',
-          showSwapTransfer: true,
-          showAdvancedSettings: false,
-          showBrandFooter: false,
-          lang: 'en',
-          mode: 'widget', // or 'popup'
-          styles: {
-            borderRadius: '12px',
-            primaryColor: '#0ea5e9',
-            backgroundColor: '#1f2937',
-            color: '#ffffff',
-          },
-        });
+        // Use the exact initialization format from the working example
+        const widgetConfig = {
+          "v": "1",
+          "element": widgetId, // Use the unique widget ID
+          "title": "HyperMirror 🪞",
+          "description": "Bridge to HyperEVM",
+          "width": "100%",
+          "height": "auto",
+          "r": 16090,
+          "supportedChains": JSON.stringify({
+            "inputChains": {
+              "1": "all",
+              "10": "all",
+              "56": "all",
+              "137": "all",
+              "8453": "all",
+              "42161": "all",
+              "43114": "all",
+              "59144": "all",
+              "7565164": "all",
+              "245022934": "all",
+              "81457": "all",
+            },
+            "outputChains": {
+              "999": "all", // HyperEVM mainnet
+            }
+          }),
+          "inputChain": 42161, // Default to Arbitrum as shown in example
+          "outputChain": destinationChainId || 999,
+          "inputCurrency": "",
+          "outputCurrency": destinationTokenAddress || "",
+          "address": "",
+          "showSwapTransfer": true,
+          "amount": amount || "",
+          "outputAmount": "",
+          "isAmountFromNotModifiable": false,
+          "isAmountToNotModifiable": false,
+          "lang": "en",
+          "mode": "deswap",
+          "isEnableCalldata": false,
+          "hideSelectionFrom": false,
+          "hideSelectionTo": false,
+          "allowedSlippage": 1,
+          "feePercent": 0,
+          "referralCode": "",
+          "hostDomain": window.location.origin,
+          "primaryColor": "288",
+          "secondaryColor": "17",
+          "textColor": "100",
+          "backgroundColor": "7",
+          "borderRadius": 8,
+          "theme": "dark",
+          "affiliateFeePercent": 0,
+          "affiliateFeeRecipient": ""
+        };
 
-        // Listen for widget events
-        window.deBridge.widget.on('success', (data: any) => {
-          console.log('Bridge transaction successful:', data);
-          onSuccess?.(data.txHash);
-        });
+        // Call the widget method directly as shown in the working example
+        console.log('Initializing deBridge widget with config:', widgetConfig);
+        const widgetResult = window.deBridge.widget(widgetConfig);
 
-        window.deBridge.widget.on('error', (error: any) => {
-          console.error('Bridge transaction failed:', error);
-          onError?.(error.message || 'Bridge transaction failed');
-        });
+        // Handle the widget result if it returns a promise
+        if (widgetResult && typeof widgetResult.then === 'function') {
+          widgetResult
+            .then((result: any) => {
+              console.log('Widget initialized successfully:', result);
+              setIsLoading(false);
+            })
+            .catch((error: any) => {
+              console.error('Widget initialization failed:', error);
+              setError('Failed to initialize widget');
+              setIsLoading(false);
+            });
+        } else {
+          // Widget doesn't return a promise, assume it's initialized
+          console.log('Widget initialized (synchronous)');
+          setIsLoading(false);
+        }
 
-        window.deBridge.widget.on('quote', (quote: any) => {
-          console.log('Bridge quote received:', quote);
-          setBridgeQuote(quote);
-        });
+        // Set up event listeners if available
+        if (window.deBridge?.on) {
+          window.deBridge.on('success', (data: any) => {
+            console.log('Bridge transaction successful:', data);
+            onSuccess?.(data.txHash || data.transactionHash || data.hash);
+          });
 
-        setIsLoading(false);
+          window.deBridge.on('error', (error: any) => {
+            console.error('Bridge transaction failed:', error);
+            const errorMessage = error?.message || error?.toString() || 'Bridge transaction failed';
+            onError?.(errorMessage);
+          });
+        }
       } catch (err) {
         console.error('Widget creation failed:', err);
-        setError('Failed to create bridge widget');
+        const errorMessage = err instanceof Error ? err.message : 'Failed to create bridge widget';
+        setError(errorMessage);
         setIsLoading(false);
       }
     };
@@ -176,20 +272,36 @@ export function DeBridgeWidget({
   };
 
   if (error) {
+    // Show manual bridge instead of just an error
     return (
-      <div className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 ${className}`}>
-        <div className="text-center">
-          <div className="w-12 h-12 mx-auto mb-4 bg-danger-100 dark:bg-danger-900 rounded-full flex items-center justify-center">
-            <svg className="w-6 h-6 text-danger-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+      <div className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 ${className}`}>
+        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Bridge Assets to HyperEVM
+              </h3>
+              <p className="text-sm text-yellow-600 dark:text-yellow-400 mt-1">
+                Widget unavailable - using manual bridge mode
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setError(null);
+                setIsLoading(true);
+                // Retry loading the widget
+                setTimeout(() => {
+                  window.location.reload();
+                }, 100);
+              }}
+            >
+              Retry Widget
+            </Button>
           </div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Bridge Widget Error</h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">{error}</p>
-          <Button onClick={() => window.location.reload()}>
-            Retry
-          </Button>
         </div>
+        <ManualBridge />
       </div>
     );
   }
@@ -222,7 +334,7 @@ export function DeBridgeWidget({
         </p>
       </div>
 
-      <div ref={widgetRef} className="min-h-[400px]">
+      <div id={widgetId} ref={widgetRef} className="min-h-[400px]">
         {/* deBridge widget will be rendered here */}
       </div>
 

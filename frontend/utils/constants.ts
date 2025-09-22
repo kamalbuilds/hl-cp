@@ -8,7 +8,7 @@ export const SUPPORTED_CHAINS = {
   HYPEREVM: {
     id: 998,
     name: "HyperEVM",
-    rpcUrl: "https://api.hyperliquid-testnet.xyz/evm",
+    rpcUrl: "https://rpc.hyperliquid-testnet.xyz/evm",
     blockExplorer: "https://explorer.hyperliquid-testnet.xyz",
     nativeCurrency: {
       name: "ETH",

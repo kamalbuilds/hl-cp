@@ -8,22 +8,22 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { InjectedConnector } from 'wagmi/connectors/injected';
-import { RainbowKitProvider, getDefaultWallets, connectorsForWallets } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider, getDefaultWallets, connectorsForWallets, darkTheme } from '@rainbow-me/rainbowkit';
 import { SUPPORTED_CHAINS } from '@/utils/constants';
 
 // Define HyperEVM chain
 const hyperEVM = {
   id: 998,
-  name: 'HyperEVM',
-  network: 'hyperevm',
+  name: 'HyperEVM Testnet',
+  network: 'hyperevm-testnet',
   nativeCurrency: {
     decimals: 18,
     name: 'Ether',
     symbol: 'ETH',
   },
   rpcUrls: {
-    public: { http: ['https://api.hyperliquid-testnet.xyz/evm'] },
-    default: { http: ['https://api.hyperliquid-testnet.xyz/evm'] },
+    public: { http: ['https://rpc.hyperliquid-testnet.xyz/evm'] },
+    default: { http: ['https://rpc.hyperliquid-testnet.xyz/evm'] },
   },
   blockExplorers: {
     default: { name: 'HyperEVM Explorer', url: 'https://explorer.hyperliquid-testnet.xyz' },
@@ -31,9 +31,10 @@ const hyperEVM = {
   testnet: true,
 } as const;
 
+
 // Configure chains and providers
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [hyperEVM, arbitrum, mainnet],
+  [hyperEVM, arbitrum],
   [
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || '' }),
     publicProvider(),
@@ -53,9 +54,10 @@ const connectors = connectorsForWallets([
     groupName: 'Other',
     wallets: [
       {
+        id: 'injected',
         name: 'Injected',
-        iconUrl: '',
-        iconBackground: '#fff',
+        iconUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEuNSA0LjVhMyAzIDAgMDEzLTNoMjNhMyAzIDAgMDEzIDN2MjNhMyAzIDAgMDEtMyAzaC0yM2EzIDMgMCAwMS0zLTNWNC41eiIgZmlsbD0iIzMzMzMzMyIvPjwvc3ZnPgo=',
+        iconBackground: '#333333',
         createConnector: () => ({
           connector: new InjectedConnector({ chains }),
         }),
@@ -87,20 +89,10 @@ export function WalletProvider({ children }: WalletProviderProps) {
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider
         chains={chains}
-        theme={{
-          lightMode: {
-            colors: {
-              accentColor: '#0ea5e9',
-              accentColorForeground: '#ffffff',
-            },
-          },
-          darkMode: {
-            colors: {
-              accentColor: '#0ea5e9',
-              accentColorForeground: '#ffffff',
-            },
-          },
-        }}
+        theme={darkTheme({
+          accentColor: '#0ea5e9',
+          accentColorForeground: 'white',
+        })}
       >
         <WalletContext.Provider value={{}}>
           {children}

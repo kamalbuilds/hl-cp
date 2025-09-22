@@ -1,0 +1,23 @@
+{
+  "name": "HyperMirror",
+  "short_name": "HyperMirror",
+  "description": "Mirror the Masters, Multiply Your Success - Cross-chain copy trading on HyperEVM",
+  "theme_color": "#0EA5E9",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

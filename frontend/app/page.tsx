@@ -5,6 +5,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 import { Button } from '@/components/ui/Button';
 import { DeBridgeWidget } from '@/components/trading/deBridgeWidget';
+import { Logo } from '@/components/ui/Logo';
 
 export default function HomePage() {
   const { address, isConnected } = useAccount();
@@ -15,16 +16,7 @@ export default function HomePage() {
       <header className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">HL</span>
-                </div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Hyperliquid Copy Trading
-                </h1>
-              </div>
-            </div>
+            <Logo showText={true} />
 
             <div className="flex items-center space-x-4">
               <ConnectButton />
@@ -40,13 +32,20 @@ export default function HomePage() {
           <div className="text-center space-y-12">
             {/* Hero Section */}
             <div className="space-y-6">
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white">
-                Copy Trade on
-                <span className="block text-gradient">Hyperliquid</span>
+              <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-4">
+                🚀 Built for Hyperliquid Hackathon • Powered by deBridge
+              </div>
+              <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white">
+                <span className="bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                  HyperMirror
+                </span>
               </h1>
-              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                The first cross-chain copy trading platform for Hyperliquid. Follow top traders,
-                copy their strategies automatically, and manage risk across multiple chains.
+              <p className="text-2xl md:text-3xl font-semibold text-gray-700 dark:text-gray-200">
+                Mirror the Masters, Multiply Your Success
+              </p>
+              <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                Revolutionary cross-chain copy trading on HyperEVM. Instantly mirror elite traders
+                with sub-100ms execution, advanced risk controls, and seamless onboarding through deBridge.
               </p>
             </div>
 
