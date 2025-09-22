@@ -1,8 +1,8 @@
-# Hyperliquid Copy Trading Platform
+# HyperMirror 🪞
 
-A comprehensive cross-chain copy trading platform built for the Hyperliquid hackathon. 
+**Mirror the Masters, Multiply Your Success**
 
-This platform enables users to discover, follow, and automatically copy trades from verified traders on HyperEVM with advanced risk management and cross-chain asset bridging.
+A revolutionary cross-chain copy trading platform built on HyperEVM for the Hyperliquid hackathon. HyperMirror enables users to automatically mirror trades from elite traders with instant execution, advanced risk management, and seamless cross-chain onboarding through deBridge.
 
 ## 🚀 Features
 
